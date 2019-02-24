@@ -53,8 +53,8 @@ body .surf-toolbar .surf-link {
   flex-direction: column;
   padding: 0.25em;
 }
-body .surf-toolbar .surf-link:hover .surf-header {
-  color: #1AD2E5;
+body .surf-toolbar .surf-link:hover {
+  color: black;
 }
 body .surf-toolbar .surf-link .surf-header {
   min-width: 0;
