@@ -2,14 +2,14 @@ $toolbar-border-radius: 4px;
 $theme-color: #1AD2E5;
 $color-gray: #888888;
 $color-font: #666666;
-$transition-duration: .5s;
+$transition-duration: .3s;
 
 body {
   .surf-toolbar {
     position: fixed;
     z-index: 9999999;
     top: 0;
-    right: -60.25em;
+    right: -40.25em;
     background-color: white;
     color: $color-font;
     box-shadow: 0 0 4px 2px rgba(black, .2);
@@ -23,12 +23,16 @@ body {
     font-size: 12px;
     padding: 0 .4em;
     opacity: .8;
-    transition: right $transition-duration, opacity $transition-duration;
+    transition: right $transition-duration, opacity $transition-duration, background-color $transition-duration;
+    font-family: "Helvetica", sans-serif;
+    box-sizing: border-box;
+    line-height: 1.2em;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
 
-    // normalize css
-    &, & * {
-      font-family: "Helvetica", sans-serif;
-      box-sizing: border-box;
+    a {
+      text-decoration: none;
+      color: $color-font;
     }
 
     &:hover {
@@ -38,16 +42,21 @@ body {
       .surf-link {
         .surf-body {
           display: flex;
-          height: 6.4em;
+          height: 6em;
         }
       }
+    }
+
+    &.surf-new {
+      background-color: $theme-color;
     }
 
     .surf-logo {
       align-self: flex-start;
       display: block;
-      height: 1.8em;
+      height: 1.8em !important;
       margin-top: .4em;
+      margin-right: .2em;
     }
 
     .surf-link {
@@ -95,9 +104,9 @@ body {
         transition: height $transition-duration;
         overflow: hidden;
         flex-direction: column;
+        justify-content: space-between;
 
         .surf-description {
-          flex: 1;
           overflow: hidden;
           display: -webkit-box;
           -webkit-line-clamp: 3;
@@ -111,8 +120,13 @@ body {
       }
     }
 
+    .surf-fixed {
+      display: flex;
+      align-items: stretch;
+    }
+
     .surf-collapsable {
-      width: 60em;
+      width: 40em;
       overflow: hidden;
       display: flex;
       align-items: stretch;

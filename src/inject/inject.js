@@ -1,16 +1,12 @@
-chrome.extension.sendMessage({}, function (response) {
-  var readyStateCheckInterval = setInterval(function () {
-    if (document.readyState === 'complete') {
-      clearInterval(readyStateCheckInterval);
-
-      // ----------------------------------------------------------
-      // This part of the script triggers when page is done loading
-      console.log('Hello. This message was sent from scripts/inject.js');
-      // ----------------------------------------------------------
-
+function getMeta(metaName) {
+  const metas = document.getElementsByTagName('meta');
+  for (let i = 0; i < metas.length; i++) {
+    if (metas[i].getAttribute('name') === metaName) {
+      return metas[i].getAttribute('content');
     }
-  }, 10);
-});
+  }
+  return '';
+}
 
 const elementCreator = tag => (parent, className) => {
   const element = document.createElement(tag);
@@ -20,7 +16,7 @@ const elementCreator = tag => (parent, className) => {
 };
 const createImg = elementCreator('img');
 const createDiv = elementCreator('div');
-const createSpan = elementCreator('span');
+const createA = elementCreator('a');
 
 const script = document.createElement('script');
 script.src = 'https://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
@@ -37,26 +33,65 @@ const handle = createDiv(toolbar, 'handle');
 const logo = createImg(toolbar, 'logo');
 logo.src = chrome.extension.getURL('images/logo.png');
 
-const createLink = parent => {
-  const link = createDiv(parent, 'link');
+let hrefs = [];
+
+const createLink = (parent, rank, key) => {
+  const link = createA(parent, 'link');
+  link.href = rank.web.url;
+  link.target = '_self';
 
   const header = createDiv(link, 'header');
   const shortcut = createDiv(header, 'shortcut');
-  shortcut.textContent = `⌘+1`;
+  shortcut.textContent = key;
   const icon = createImg(header, 'icon');
-  icon.src = 'https://image.flaticon.com/icons/svg/124/124010.svg';
+  icon.src = rank.web.favicon;
   const title = createDiv(header, 'title');
-  title.textContent = 'Varisa Sarah Gumpangkum';
+  title.textContent = rank.web.title;
 
   const body = createDiv(link, 'body');
   const description = createDiv(body, 'description');
-  description.textContent = 'Facebook, Inc. is an American online social media and social networking service company. It is based in Menlo Park, California. Its was founded by Mark Zuckerberg, along with fellow Harvard College students and roommates Eduardo Saverin, Andrew McCollum, Dustin Moskovitz and Chris Hughes.';
+  description.textContent = rank.web.description;
   const visited = createDiv(body, 'visited');
-  visited.textContent = 'Visited 32 times last week.';
+  visited.textContent = `Visited ${rank.count} times last week.`;
 };
 
-createLink(toolbar);
+const fixed = createDiv(toolbar, 'fixed');
 const collapsable = createDiv(toolbar, 'collapsable');
-for (let i = 0; i < 3; i++) {
-  createLink(collapsable);
-}
+
+let prevHref = null;
+const updateRanks = () => {
+  const { href } = window.location;
+  if (prevHref !== href) {
+    prevHref = href;
+    chrome.extension.sendMessage(href, ranks => {
+      toolbar.classList.add('surf-new');
+      window.setTimeout(() => toolbar.classList.remove('surf-new'), 500);
+      const [primary, secondary, tertiary] = ranks;
+      hrefs = ranks.map(rank => rank.web.url);
+      const elements = document.getElementsByClassName('surf-link');
+      while (elements.length > 0) {
+        elements[0].parentNode.removeChild(elements[0]);
+      }
+      createLink(fixed, primary, '⌘+1');
+      createLink(collapsable, secondary, '⌘+2');
+      createLink(collapsable, tertiary, '⌘+3');
+    });
+  }
+};
+
+updateRanks();
+
+window.setInterval(updateRanks, 500);
+
+document.onkeydown = e => {
+  e.preventDefault();
+  if (e.metaKey) {
+    switch (e.key) {
+      case '1':
+      case '2':
+      case '3':
+        window.location.href = hrefs[e.key - '1'];
+        break;
+    }
+  }
+};

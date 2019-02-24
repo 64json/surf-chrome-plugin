@@ -1,9 +1,9 @@
 {
-  "name": "< Surf />",
+  "name": "Surf",
   "version": "0.0.1",
   "manifest_version": 2,
-  "description": "This extension was created with the awesome extensionizr.com",
-  "homepage_url": "http://extensionizr.com",
+  "description": "Surf serves users with intelligent suggestions based on browsing activity.",
+  "homepage_url": "https://surf-plugin.com",
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
@@ -25,7 +25,9 @@
     "chrome://favicon/",
     "contentSettings",
     "history",
-    "tabs"
+    "tabs",
+    "http://*/*",
+    "https://*/*"
   ],
   "web_accessible_resources": [
     "images/*"
