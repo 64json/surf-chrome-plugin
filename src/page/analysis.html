@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Surf - Analysis</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://d3js.org/d3-array.v1.min.js"></script>
+    <script src="https://d3js.org/d3-path.v1.min.js"></script>
+    <script src="https://d3js.org/d3-chord.v1.min.js"></script>
+
+    <style>
+        html {
+            height: 100%;
+        }
+
+        body {
+            height: 100%;
+            display: flex;
+            align-items: stretch;
+            padding: 0;
+            margin: 0;
+        }
+
+        #chart {
+            align-self: center;
+            flex: 1;
+            width: auto;
+            height: 960px;
+        }
+
+        .panel {
+            width: 440px;
+            background-color: #97B7D8;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 40px;
+            box-sizing: border-box;
+            color: white;
+            text-shadow: .1em .1em #7A92AD;
+            overflow-y: scroll;
+        }
+
+        .logo {
+            align-self: center;
+            width: 200px;
+            height: auto;
+            margin-bottom: 32px;
+        }
+
+        .divider {
+            align-self: stretch;
+            height: 2px;
+            background-color: white;
+            margin-bottom: 8px;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul {
+            list-style: decimal;
+        }
+
+        li {
+            font-size: 16px;
+            margin-bottom: 8px;
+            margin-left: 0;
+        }
+
+        * {
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+<svg id="chart"></svg>
+<div class="panel">
+    <img class="logo" src="../../images/logo.png">
+    <h1>Most Visited</h1>
+    <div class="divider"></div>
+    <ul id="most_visited">
+    </ul>
+    <h1>Longest Visited</h1>
+    <div class="divider"></div>
+    <ul id="longest_visited">
+    </ul>
+    <h1>Most Connected To</h1>
+    <div class="divider"></div>
+    <ul id="most_connected_to">
+    </ul>
+    <h1>Most Connected From</h1>
+    <div class="divider"></div>
+    <ul id="most_connected_from">
+    </ul>
+</div>
+<script src="analysis.js"></script>
+</body>
+</html>

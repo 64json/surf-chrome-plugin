@@ -125,14 +125,20 @@ websRef.once('value', function (snap) {
   });
 });
 
-chrome.extension.onMessage.addListener((url, sender, sendResponse) => {
-  let id = getId(url);
-  if (!id) {
-    let ids = Object.keys(webs).filter(id => webs[id].url && isSameDomain(url, webs[id].url));
-    if (!ids.length) ids = Object.keys(webs);
-    id = ids[Math.random() * ids.length | 0];
+chrome.extension.onMessage.addListener((request, sender, sendResponse) => {
+  if (!request) return;
+  if (request.method === 'getRanks') {
+    const { url } = request;
+    let id = getId(url);
+    if (!id) {
+      let ids = Object.keys(webs).filter(id => webs[id].url && isSameDomain(url, webs[id].url));
+      if (!ids.length) ids = Object.keys(webs);
+      id = ids[Math.random() * ids.length | 0];
+    }
+    sendResponse(webs[id].ranks.map(rank => ({ ...rank, web: webs[rank.web] })));
+    currentIdRef.set(id);
+    currentUrlRef.set(url);
+  } else if (request.method === 'getWebs') {
+    sendResponse(webs);
   }
-  sendResponse(webs[id].ranks.map(rank => ({ ...rank, web: webs[rank.web] })));
-  currentIdRef.set(id);
-  currentUrlRef.set(url);
 });

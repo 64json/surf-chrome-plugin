@@ -61,7 +61,7 @@ const collapsable = createDiv(toolbar, 'collapsable');
 let prevHref = null;
 const updateRanks = href => {
   prevHref = href;
-  chrome.extension.sendMessage(href, ranks => {
+  chrome.extension.sendMessage({ method: 'getRanks', url: href }, ranks => {
     toolbar.classList.add('surf-new');
     window.setTimeout(() => toolbar.classList.remove('surf-new'), 500);
     const [primary, secondary, tertiary] = ranks;
