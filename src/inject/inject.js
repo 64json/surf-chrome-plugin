@@ -84,12 +84,12 @@ updateRanks();
 window.setInterval(updateRanks, 500);
 
 document.onkeydown = e => {
-  e.preventDefault();
   if (e.metaKey) {
     switch (e.key) {
       case '1':
       case '2':
       case '3':
+        e.preventDefault();
         window.location.href = hrefs[e.key - '1'];
         break;
     }

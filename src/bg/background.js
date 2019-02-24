@@ -34,7 +34,7 @@ const webData = {
   },
 };
 
-const sanitize = url => url && url.contains('youtube') ? url.split('&')[0] : url.split('?')[0];
+const sanitize = url => url;
 
 const tabUrls = {};
 const tabTimestamps = {};
