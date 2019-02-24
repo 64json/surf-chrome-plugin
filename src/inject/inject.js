@@ -70,9 +70,9 @@ const updateRanks = href => {
     while (elements.length > 0) {
       elements[0].parentNode.removeChild(elements[0]);
     }
-    createLink(fixed, primary, '⌘+1');
-    createLink(collapsable, secondary, '⌘+2');
-    createLink(collapsable, tertiary, '⌘+3');
+    if (primary) createLink(fixed, primary, '⌘+1');
+    if (secondary) createLink(collapsable, secondary, '⌘+2');
+    if (tertiary) createLink(collapsable, tertiary, '⌘+3');
   });
 };
 

@@ -34,10 +34,6 @@ body {
       text-decoration: none;
       font-weight: normal;
       color: $color-font;
-
-      &:hover {
-        color: $theme-color;
-      }
     }
 
     &:hover {
@@ -70,6 +66,12 @@ body {
       display: flex;
       flex-direction: column;
       padding: .25em;
+
+      &:hover {
+        .surf-header {
+          color: $theme-color;
+        }
+      }
 
       .surf-header {
         min-width: 0;

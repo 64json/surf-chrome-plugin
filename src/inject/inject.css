@@ -28,9 +28,6 @@ body .surf-toolbar a {
   font-weight: normal;
   color: #666666;
 }
-body .surf-toolbar a:hover {
-  color: #1AD2E5;
-}
 body .surf-toolbar:hover {
   right: 0;
   opacity: 1;
@@ -55,6 +52,9 @@ body .surf-toolbar .surf-link {
   display: flex;
   flex-direction: column;
   padding: 0.25em;
+}
+body .surf-toolbar .surf-link:hover .surf-header {
+  color: #1AD2E5;
 }
 body .surf-toolbar .surf-link .surf-header {
   min-width: 0;
