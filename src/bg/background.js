@@ -1,5 +1,5 @@
 chrome.extension.onMessage.addListener((url, sender, sendResponse) => {
-  if(!ranksMap[sanitize(url)]) ranksMap[sanitize(url)] = [];
+  if (!ranksMap[sanitize(url)]) ranksMap[sanitize(url)] = [];
   const ranks = ranksMap[sanitize(url)];
   while (ranks.length < 3) {
     const web = Object.values(webData).find(web => ranks.every(rank => rank.web !== web));
@@ -34,7 +34,7 @@ const webData = {
   },
 };
 
-const sanitize = url => url;
+const sanitize = url => url && url.contains('youtube') ? url.split('&')[0] : url.split('?')[0];
 
 const tabUrls = {};
 const tabTimestamps = {};
