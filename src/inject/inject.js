@@ -52,36 +52,39 @@ const createLink = (parent, rank, key) => {
   const description = createDiv(body, 'description');
   description.textContent = rank.web.description;
   const visited = createDiv(body, 'visited');
-  visited.textContent = `Visited ${rank.count} times last week.`;
+  visited.textContent = `Visited ${rank.count} times (${(rank.duration / 1000 / 60 | 0)} minutes) last week.`;
 };
 
 const fixed = createDiv(toolbar, 'fixed');
 const collapsable = createDiv(toolbar, 'collapsable');
 
 let prevHref = null;
-const updateRanks = () => {
-  const { href } = window.location;
-  if (prevHref !== href) {
-    prevHref = href;
-    chrome.extension.sendMessage(href, ranks => {
-      toolbar.classList.add('surf-new');
-      window.setTimeout(() => toolbar.classList.remove('surf-new'), 500);
-      const [primary, secondary, tertiary] = ranks;
-      hrefs = ranks.map(rank => rank.web.url);
-      const elements = document.getElementsByClassName('surf-link');
-      while (elements.length > 0) {
-        elements[0].parentNode.removeChild(elements[0]);
-      }
-      createLink(fixed, primary, '⌘+1');
-      createLink(collapsable, secondary, '⌘+2');
-      createLink(collapsable, tertiary, '⌘+3');
-    });
-  }
+const updateRanks = href => {
+  prevHref = href;
+  chrome.extension.sendMessage(href, ranks => {
+    toolbar.classList.add('surf-new');
+    window.setTimeout(() => toolbar.classList.remove('surf-new'), 500);
+    const [primary, secondary, tertiary] = ranks;
+    hrefs = ranks.map(rank => rank.web.url);
+    const elements = document.getElementsByClassName('surf-link');
+    while (elements.length > 0) {
+      elements[0].parentNode.removeChild(elements[0]);
+    }
+    createLink(fixed, primary, '⌘+1');
+    createLink(collapsable, secondary, '⌘+2');
+    createLink(collapsable, tertiary, '⌘+3');
+  });
 };
 
-updateRanks();
+updateRanks(window.location.href);
 
-window.setInterval(updateRanks, 500);
+window.setInterval(() => {
+  if (hovered) return;
+  const { href } = window.location;
+  if (prevHref !== href) {
+    updateRanks(href);
+  }
+}, 500);
 
 document.onkeydown = e => {
   if (e.metaKey) {
@@ -95,3 +98,18 @@ document.onkeydown = e => {
     }
   }
 };
+
+let hovered = false;
+
+document.addEventListener('mouseover', function (e) {
+  let elem = e.target;
+  while (elem !== document) {
+    if ('href' in elem && !elem.classList.contains('surf-link')) {
+      hovered = true;
+      updateRanks(elem.href);
+      return;
+    }
+    elem = elem.parentNode;
+  }
+  hovered = false;
+});
