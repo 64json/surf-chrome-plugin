@@ -1,4 +1,6 @@
-const sanitize = url => url && (~url.indexOf('youtube') ? url.split('&')[0] : url.split('?')[0]);
+const sanitize = url => url && (
+  (~url.indexOf('youtube') || ~url.indexOf('facebook.com/profile.php')) ? url.split('&')[0] : url.split('?')[0]
+);
 const isSameDomain = (url1, url2) => url1.split('/')[2] === url2.split('/')[2];
 const generateId = () => {
   var text = '';
@@ -87,9 +89,9 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
           count: 1,
           duration,
         });
-        webs[fromId].ranks.sort((r1, r2) => r2.count - r1.count);
-        websRef.child(fromId).child('ranks').set(webs[fromId].ranks);
       }
+      webs[fromId].ranks.sort((r1, r2) => r2.count - r1.count);
+      websRef.child(fromId).child('ranks').set(webs[fromId].ranks);
     }
 
     tabUrls[tabId] = toUrl;
